@@ -19,7 +19,8 @@
 
 // define topics
 
-
+// ------------[SOLENOID]------------------
+#define pullPin 14
 
 // ------------[DEBUG]----------------
 #define debug true

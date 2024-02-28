@@ -6,5 +6,6 @@
 class mqttManager {
     public:
         mqttManager();
-}
+};
 
+#endif
