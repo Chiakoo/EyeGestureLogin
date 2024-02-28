@@ -3,16 +3,16 @@
 #include "solenoid.h"
 #include "settings.h"
 
-// put function declarations here:
-int myFunction(int, int);
 
+mqttManager mqtt;
 Solenoid doorOpener(pullPin);
 unsigned long timer = 0;
 
 void setup() {
-  // put your setup code here, to run once:
+    Serial.begin(115200);
 
-  int result = myFunction(2, 3);
+    mqtt.wifiSetup();
+    //mqtt.mqttSetup();
 }
 
 void loop() {
@@ -21,10 +21,7 @@ void loop() {
         doorOpener.pull();
         timer = millis();
     }
-  // put your main code here, to run repeatedly:
+    doorOpener.compute();
+    //mqtt.mqttRefresher();
 }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
-}
