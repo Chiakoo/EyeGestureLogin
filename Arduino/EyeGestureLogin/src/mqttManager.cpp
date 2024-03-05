@@ -3,19 +3,34 @@
 #include <WiFiClient.h>
 #include <WiFi.h>
 #include "settings.h"
+#include <list>
+#include <string>
+#include <optional>
+#include <iostream>
 
 void wifiSetup();
 
 void mqttRefresher();
 void mqttSetup();
 boolean reconnect();
-void callback(char *topic, byte *payload, int length);
-
 void readInputFromConsole();
 
 WiFiClient espClient;
 PubSubClient mqttClient(espClient);
 unsigned long lastReconnectAttempt = 0;
+
+// create a list of 2x charcter type
+// string, bool (?)
+std::list <std::pair< String, String >> callbacks = {std::make_pair("topic", "value")};
+
+void mqttManager::mqttSetup(){
+    // Do not use to long names here, the default maximum package size is 128 bytes
+    mqttClient.setServer(mqttServer, mqttServerPort);
+    using std::placeholders::_1;
+    using std::placeholders::_2;
+    using std::placeholders::_3;
+    mqttClient.setCallback(std::bind(&mqttManager::callback, this, _1,_2,_3));
+}
 
 void mqttManager::mqttRefresher() {
     if (!mqttClient.connected()) {
@@ -35,27 +50,55 @@ void mqttManager::mqttRefresher() {
     }
 }
 
-void callback(char *topic, byte *payload, unsigned int length) {
-    String msg = "";
-    for (int j = 0; j < length; j++) {
-        msg.concat((char)payload[j]);
-    }
-    //myMorseAnalyzer->setWord(msg, true);
-}
-
-void mqttManager::mqttSetup(){
-    // Do not use to long names here, the default maximum package size is 128 bytes
-    mqttClient.setServer(mqttServer, mqttServerPort);
-    //mqttClient.setCallback(callback);
-}
 
 boolean mqttManager::reconnect() {
     if (mqttClient.connect(mqttDeviceName, mqttUser, mqttPassword)) {
-        mqttClient.subscribe(mqttSubscribeChannel);
-        mqttClient.publish(mqttSubscribeChannel, "CONNECTED");
+        mqttClient.subscribe(mqttOpenDoor);
+        mqttClient.subscribe(mqttDoorStatus);
+        mqttClient.subscribe(mqttConnectionStatus);
+        mqttClient.publish(mqttConnectionStatus, "CONNECTED");
+        Serial.println("MQTT connected");
     }
     return mqttClient.connected();
 }
+
+
+// called when message arrives for a subscription of this client
+void mqttManager::callback(char *topic, uint8_t *payload, unsigned int length) {
+  
+    String msg = "";
+    for (int i = 0; i < length; i++) {
+        msg.concat((char)payload[i]);
+        //Serial.print((char)payload[i]);
+    }
+
+    payload[length] = '\0';
+    String content = String((char*)payload);
+
+    Serial.print("[" );
+    Serial.print(topic);
+    Serial.print("]: ");
+    Serial.println(content);
+    callbacks.push_back(std::make_pair(topic, content));
+}
+
+bool mqttManager::checkCallback(String* topic, String* content) {
+    if (!mqttClient.connected()) return false;
+    
+    if (callbacks.size() > 0) {
+        std::pair<String, String> currentCallback = callbacks.front();
+        *topic = currentCallback.first;
+        *content = currentCallback.second;
+        callbacks.pop_front();
+        // Serial.print("Size List: ");
+        // Serial.println(callbacks.size());
+        return true;
+    }
+    
+    // empty list
+    return false;
+}
+
 
 void mqttManager::wifiSetup() {
     delay(10);
@@ -73,6 +116,12 @@ void mqttManager::wifiSetup() {
         Serial.println("My IP address is: ");
         Serial.println(WiFi.localIP());
     }
+}
+
+void mqttManager::publishTopic (const char *topic, const char *message) {
+    mqttClient.publish(topic, message);
+    Serial.print("Manager published: ");
+    Serial.println(topic);
 }
 
 mqttManager::mqttManager() {
