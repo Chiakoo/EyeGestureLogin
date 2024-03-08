@@ -22,14 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
-using M2MqttUnity;
 
 /// <summary>
 /// Examples for the M2MQTT library (https://github.com/eclipse/paho.mqtt.m2mqtt),
@@ -48,10 +43,10 @@ namespace M2MqttUnity.Examples
         private List<string> eventMessages = new List<string>();
 
         // publish
-        string mqttConnectionStatus ="EyeGestureLogin/Unity/isConnected" ;
-        string[] mqttOpenDoor = new string[] { "EyeGestureLogin/OpenDoor" } ;
+        string mqttConnectionStatus = "EyeGestureLogin/Unity/isConnected" ;
+        string[] mqttOpenDoor = new string[] {"EyeGestureLogin/OpenDoor"} ;
         // subscribe
-        string[] mqttDoorStatus = new string[] { "EyeGestureLogin/isDoorOpen" } ;
+        string[] mqttDoorStatus = new string[] {"EyeGestureLogin/isDoorOpen"} ;
        
 
         protected override void OnConnecting()
@@ -107,11 +102,13 @@ namespace M2MqttUnity.Examples
             StoreMessage(msg);
         }
 
+        // needed?
         private void StoreMessage(string eventMsg)
         {
             eventMessages.Add(eventMsg);
         }
 
+        // needed?
         private void ProcessMessage(string msg)
         {
             Debug.Log("Received: " + msg);
