@@ -61,7 +61,12 @@ namespace M2MqttUnity.Examples
 
             // Subscribe to topics
             SubscribeTopic(mqttDoorStatus);
-            client.Publish(mqttConnectionStatus, System.Text.Encoding.UTF8.GetBytes("CONNECTED"), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
+            PublishTopic(mqttConnectionStatus, "CONNECTED");
+        }
+
+        public void PublishTopic(string topic, string message) 
+        {
+            client.Publish(topic, System.Text.Encoding.UTF8.GetBytes(message), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
         }
 
         protected void SubscribeTopic(string[] topic)
