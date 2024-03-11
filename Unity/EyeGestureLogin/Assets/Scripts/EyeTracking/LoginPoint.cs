@@ -8,6 +8,8 @@ public class LoginPoint : MonoBehaviour
 
     public GameObject loginPointObj;
 
+    public SmartConnector smartConnector;
+
     private Color initColor;
     // Start is called before the first frame update
     void Start()
@@ -28,6 +30,11 @@ public class LoginPoint : MonoBehaviour
     public void Selected(){
         Debug.Log("Selected by gaze");
         loginPointObj.GetComponent<Renderer> ().material.color = Color.green;
+        Debug.Log("NAme:" + loginPointObj.name);
+        if(loginPointObj.name.Equals("Cube (2)")){
+            Debug.Log("Unlock solenoid");
+            smartConnector.Unlock();
+        }
     }
 
     public void Deselected(){

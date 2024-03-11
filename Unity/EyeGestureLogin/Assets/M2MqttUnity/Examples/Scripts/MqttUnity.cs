@@ -1,4 +1,4 @@
-﻿/*
+/*
 The MIT License (MIT)
 
 Copyright (c) 2018 Giovanni Paolo Vigano'
@@ -44,7 +44,7 @@ namespace M2MqttUnity.Examples
 
         // publish
         string mqttConnectionStatus = "EyeGestureLogin/Unity/isConnected" ;
-        string[] mqttOpenDoor = new string[] {"EyeGestureLogin/OpenDoor"} ;
+        public string[] mqttOpenDoor = new string[] {"EyeGestureLogin/OpenDoor"} ;
         // subscribe
         string[] mqttDoorStatus = new string[] {"EyeGestureLogin/isDoorOpen"} ;
 
