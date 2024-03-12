@@ -8,11 +8,12 @@ using System;
 public class SmartConnector : MonoBehaviour
 {
     // Start is called before the first frame update
-    public MqttUnity mqtt;
+
+    public List<SmartDevice> smartDevices;
 
     void Start()
     {
-        mqtt = GameObject.Find("MQTT Connection").GetComponent<MqttUnity>();
+        
     }
 
     // Update is called once per frame
@@ -21,16 +22,7 @@ public class SmartConnector : MonoBehaviour
         
     }
 
-    public void Unlock(){
-        mqtt.PublishTopic(mqtt.mqttOpenDoor[0], "true");
-    }
-
-    public bool IsUnlocked(){
-        throw new NotSupportedException();
-        return false;
-    }
-
-    public void Lock(){
-        throw new NotSupportedException();
+    public SmartDevice GetSmartDevice(int id){
+        return smartDevices[id];
     }
 }
