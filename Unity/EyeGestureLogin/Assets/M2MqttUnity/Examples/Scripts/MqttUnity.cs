@@ -35,7 +35,7 @@ namespace M2MqttUnity.Examples
     /// Script for using M2MQTT with Unity
     /// </summary>
     /// 
-
+    
 
     public class MqttUnity : M2MqttUnityClient
     {   
@@ -47,6 +47,8 @@ namespace M2MqttUnity.Examples
         string[] mqttOpenDoor = new string[] {"EyeGestureLogin/OpenDoor"} ;
         // subscribe
         string[] mqttDoorStatus = new string[] {"EyeGestureLogin/isDoorOpen"} ;
+
+        public bool IsConnected = false;
        
 
         protected override void OnConnecting()
@@ -62,6 +64,7 @@ namespace M2MqttUnity.Examples
             // Subscribe to topics
             SubscribeTopic(mqttDoorStatus);
             PublishTopic(mqttConnectionStatus, "CONNECTED");
+            IsConnected = true;
         }
 
         public void PublishTopic(string topic, string message) 
@@ -82,16 +85,19 @@ namespace M2MqttUnity.Examples
         protected override void OnConnectionFailed(string errorMessage)
         {
             Debug.Log("CONNECTION FAILED! " + errorMessage);
+            IsConnected = false;
         }
 
         protected override void OnDisconnected()
         {
             Debug.Log("Disconnected.");
+            IsConnected = false;
         }
 
         protected override void OnConnectionLost()
         {
             Debug.Log("CONNECTION LOST!");
+            IsConnected = false;
         }
 
         protected override void Start()
@@ -127,11 +133,6 @@ namespace M2MqttUnity.Examples
         private void OnDestroy()
         {
             Disconnect();
-        }
-
-        private void OnValidate()
-        {
-            Debug.Log("deleted content");
         }
     }
 }
