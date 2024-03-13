@@ -7,6 +7,7 @@ using M2MqttUnity.Examples;
 using System.Runtime.InteropServices;
 using System;
 using UnityEngine.Events;
+using System.Collections.ObjectModel;
 
 public class Validator : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class Validator : MonoBehaviour
     [Range(1, 10)]
     public int timeout = 5;
     [Tooltip("maximum password length possible (all fields)")]
-    public int maxLength = 5;
+    public int maxLength = 9;
 
     [Header("Unity Events")]
     [Tooltip("Access: ValidPasswordEvent.AddListener(validPasswordReceived())")]
@@ -31,7 +32,7 @@ public class Validator : MonoBehaviour
     // dictionary which checks for skipped digits
     Dictionary<int, Dictionary<int, int>> skippable_dict = new Dictionary<int, Dictionary<int, int>>();
     // the correct password
-    private  List<int> password = new  List<int> {1, 2, 3, 4};
+    private  ReadOnlyCollection<int> password = (new List<int>{1, 2, 3, 4}).AsReadOnly();
     // the so far entered PIN
     private List<int> PIN = new List<int>();
     // is the start condition (first digit=5) already fulfilled?
@@ -40,16 +41,16 @@ public class Validator : MonoBehaviour
     private MqttUnity mqtt;
     private string openDoor = "EyeGestureLogin/OpenDoor";
     // is test already done?
-    private bool testDone = true;
+    private bool testDone = false;
     private int lastTimestamp = 0;
 
     // SmartConnector smartConnector;
+    // SmartDevice currentDevice;
     
 
     // Start is called before the first frame update
     void Start()
     {
-        password =  new List<int>{1, 2, 3, 4};
         mqtt = GameObject.Find("MQTT").GetComponent<MqttUnity>();
         // smartConnector = GameObject.Find("SmartConnector").GetComponent<SmartConnector>();
 
@@ -65,6 +66,8 @@ public class Validator : MonoBehaviour
 
         if (mqtt.IsConnected && PIN.Count > 0) {
             // timeout
+            Debug.Log("currentTime: " + DateTime.Now.Second);
+            Debug.Log("lastTimestamp: " + lastTimestamp);
             if (DateTime.Now.Second > lastTimestamp + timeout) {
                 Debug.Log("password timeout");
                 checkPIN();
@@ -83,9 +86,7 @@ public class Validator : MonoBehaviour
         // trying to access different device
         if (currDeviceID != ID) {
             resetPIN();
-            currDeviceID = ID;
-            // get password of new device from SmartConnector 
-            // password = smartConnector.getPassword(currID);
+            changeDevice(ID);
         }
        
         // the start condition is not fulfilled yet
@@ -114,8 +115,9 @@ public class Validator : MonoBehaviour
                     // only add if digit not already in PIN
                     if(PIN.Contains(skippedDigit)) {
                         PIN.Add(skippedDigit);
+                        lastTimestamp = DateTime.Now.Second;
                     } 
-                    Debug.Log(PIN);
+                    Debug.Log(PIN.ToString());
                     // PIN is already complete
                     if (PIN.Count == maxLength) {
                         return;
@@ -125,9 +127,20 @@ public class Validator : MonoBehaviour
             // Debug.Log("Added digit to PIN");
             // only add if digit not already in PIN
             PIN.Add(digit);
-            Debug.Log(PIN);
+            lastTimestamp = DateTime.Now.Second;
+            Debug.Log(PIN.ToString());
         }
     }
+
+    void changeDevice(int ID) 
+    {
+        currDeviceID = ID;
+        // get password of new device from SmartConnector 
+        // currentDevice = smartConnector.GetSmartDevice(currDeviceID);
+        // password = currentDevice.GetPassphrase();
+        Debug.Log("new device: " +  currDeviceID);
+        Debug.Log("new password: " +  password.ToString());
+}
 
     void resetPIN() {
         PIN.Clear();
@@ -171,10 +184,7 @@ public class Validator : MonoBehaviour
         resetPIN();
     }
 
-    public void SetPassword (List<int> newPassword) 
-    {
-        password = newPassword;
-    }
+
 
     private void createSkippableDictionary() 
     {
@@ -233,14 +243,7 @@ public class Validator : MonoBehaviour
         NewDigit(1, 3);
         // start condition check
         NewDigit(1, 5);
-        // wrong PIN
-        NewDigit(1, 1);
-        NewDigit(1, 3);
-        NewDigit(1, 3);
-        NewDigit(1, 3);
-        // start condition check
-        NewDigit(1, 5);
-        // valid password
+        // valid PIN
         NewDigit(1, 1);
         NewDigit(1, 2);
         NewDigit(1, 3);
