@@ -4,7 +4,8 @@ using System.Collections.ObjectModel;
 using M2MqttUnity.Examples;
 using UnityEngine;
 
-public class MQTTSmartDevice : MonoBehaviour, SmartDevice
+[System.Serializable]
+public class MQTTSmartDevice : SmartDevice
 {
 
     public MqttUnity mqtt;
@@ -25,33 +26,33 @@ public class MQTTSmartDevice : MonoBehaviour, SmartDevice
         
     }
 
-    public bool IsAvailable()
+    public override bool IsAvailable()
+    {
+        return mqtt.IsConnected;
+    }
+
+    public override bool IsUnlocked()
     {
         throw new System.NotImplementedException();
     }
 
-    public bool IsUnlocked()
+    public override bool Lock()
     {
         throw new System.NotImplementedException();
     }
 
-    public bool Lock()
+    public override int RemainingUnlockTimeInSeconds()
     {
         throw new System.NotImplementedException();
     }
 
-    public int RemainingUnlockTimeInSeconds()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public bool Unlock()
+    public override bool Unlock()
     {
         mqtt.PublishTopic(mqtt.mqttOpenDoor[0], "true");
         return true;
     }
 
-    public ReadOnlyCollection<int> GetPassphrase()
+    public override ReadOnlyCollection<int> GetPassphrase()
     {
         return passPhrase.AsReadOnly();
     }

@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public interface SmartDevice
+public abstract class SmartDevice: MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -22,15 +22,15 @@ public interface SmartDevice
     /// Returns the availabillity of the device.
     /// </summary>
     /// <returns></returns>
-    public bool IsAvailable();
+    public abstract bool IsAvailable();
 
-    public bool Unlock();
+    public abstract bool Unlock();
 
-    public bool Lock();
+    public abstract bool Lock();
 
-    public bool IsUnlocked();
+    public abstract bool IsUnlocked();
 
-    public int RemainingUnlockTimeInSeconds();
+    public abstract int RemainingUnlockTimeInSeconds();
 
-    public ReadOnlyCollection<int> GetPassphrase();
+    public abstract ReadOnlyCollection<int> GetPassphrase();
 }

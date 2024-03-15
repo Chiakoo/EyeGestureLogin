@@ -14,11 +14,13 @@ public class SingleGazePoint : MonoBehaviour
 
     private Color initColor;
 
+    private Validator validator;
     public int deviceId {set; get;}
     // Start is called before the first frame update
     void Start()
     {
         initColor = loginPointObj.GetComponent<Renderer> ().material.color;
+        validator = GameObject.Find("Validator").GetComponent<Validator>();
     }
 
     // Update is called once per frame
@@ -32,18 +34,15 @@ public class SingleGazePoint : MonoBehaviour
     }
 
     public void Selected(){
-        Debug.Log("Selected by gaze");
+        Debug.Log("Selected by gaze (" + loginPointObj.name+")");
         loginPointObj.GetComponent<Renderer> ().material.color = Color.green;
-        Debug.Log("NAme:" + loginPointObj.name);
+        //Debug.Log("NAme:" + );
         int enteredNumber = Int32.Parse(loginPointObj.name);
-        if(loginPointObj.name.Equals("Cube (2)")){
-            Debug.Log("Unlock solenoid");
-            smartConnector.GetSmartDevice(0).Unlock();
-        }
+        validator.NewDigit(deviceId, enteredNumber);
     }
 
     public void Deselected(){
-        Debug.Log("Deselected by gaze!");
+        Debug.Log("Deselected by gaze (" + loginPointObj.name+")");
         loginPointObj.GetComponent<Renderer> ().material.color = initColor;
     }
 }
