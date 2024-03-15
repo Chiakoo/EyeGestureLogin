@@ -9,7 +9,8 @@ public class SmartConnector : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    public List<SmartDevice> smartDevices;
+    [SerializeReference]
+    public List<SmartDevice> m_smartDevices = new List<SmartDevice>();
 
     void Start()
     {
@@ -23,6 +24,6 @@ public class SmartConnector : MonoBehaviour
     }
 
     public SmartDevice GetSmartDevice(int id){
-        return smartDevices[id];
+        return m_smartDevices[id];
     }
 }
