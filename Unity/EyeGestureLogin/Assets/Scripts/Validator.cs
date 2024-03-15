@@ -1,10 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEngine;
-using M2MqttUnity;
-using M2MqttUnity.Examples;
-using System.Runtime.InteropServices;
 using System;
 using UnityEngine.Events;
 using System.Collections.ObjectModel;
@@ -32,51 +27,53 @@ public class Validator : MonoBehaviour
     // dictionary which checks for skipped digits
     Dictionary<int, Dictionary<int, int>> skippable_dict = new Dictionary<int, Dictionary<int, int>>();
     // the correct password
-    private  ReadOnlyCollection<int> password = (new List<int>{1, 2, 3, 4}).AsReadOnly();
+    private  ReadOnlyCollection<int> password = (new List<int>{1, 2, 3, 4, 5, 6, 7, 8, 9}).AsReadOnly();
     // the so far entered PIN
     private List<int> PIN = new List<int>();
-    // is the start condition (first digit=5) already fulfilled?
-    private bool validStart = false;
-    // open door mqtt topic 
-    private MqttUnity mqtt;
-    private string openDoor = "EyeGestureLogin/OpenDoor";
     // is test already done?
     private bool testDone = false;
     private int lastTimestamp = 0;
 
-    // SmartConnector smartConnector;
-    // SmartDevice currentDevice;
+    SmartConnector smartConnector;
+    SmartDevice smartDevice;
     
 
     // Start is called before the first frame update
     void Start()
     {
-        mqtt = GameObject.Find("MQTT").GetComponent<MqttUnity>();
-        // smartConnector = GameObject.Find("SmartConnector").GetComponent<SmartConnector>();
+        smartConnector = GameObject.Find("SmartConnector").GetComponent<SmartConnector>();
 
         createSkippableDictionary();
     }
 
-    // Update is called once per frame
+
+    int digit = 1;
     void Update()
     {
-        if (mqtt.IsConnected && !testDone) {
-            runTest1();
-        }
+        // only check if someone is currently entering PIN
+        if (PIN.Count<=0) return;
 
-        if (mqtt.IsConnected && PIN.Count > 0) {
-            // timeout
-            Debug.Log("currentTime: " + DateTime.Now.Second);
-            Debug.Log("lastTimestamp: " + lastTimestamp);
-            if (DateTime.Now.Second > lastTimestamp + timeout) {
-                Debug.Log("password timeout");
-                checkPIN();
-            }
-            // reached maximum length
-            else if (PIN.Count >= maxLength) {
-                Debug.Log("max Length reached");
-                checkPIN();
-            }
+        // only check if device is connected
+        if (!smartDevice.IsAvailable()) return;
+
+        // Testing
+        if (!testDone) {
+            // runTest1();
+            NewDigit(1, 5);
+            testDone = true;
+        }
+        NewDigit(1, digit);
+        digit ++;
+
+        // timeout
+        if (DateTime.Now.Second > lastTimestamp + timeout) {
+            Debug.Log("password timeout");
+            checkPIN();
+        }
+        // reached maximum length
+        else if (PIN.Count >= maxLength) {
+            Debug.Log("max Length reached");
+            checkPIN();
         }
     }
 
@@ -88,47 +85,36 @@ public class Validator : MonoBehaviour
             resetPIN();
             changeDevice(ID);
         }
-       
-        // the start condition is not fulfilled yet
-        // --> 5
-        if (!validStart) {
-            if (digit == 5) {
-                validStart = true;
-                Debug.Log("start condition check");
-                return;
-            }
-            // discard digit
-            Debug.Log("discarded digit");
-            return;
-        }
-        else {
-            // if digit already in PIN -> return
-            if(PIN.Contains(digit)) return;
-            
-            // if skipping is not allowed, check if digit has been skipped
-            if (!skipAllowed && PIN.Count>0) {
-                int skippedDigit = checkSkipped(PIN[PIN.Count-1], digit);
-                // value found
-                if (skippedDigit != 0) {
+        
+        // if digit already in PIN -> return
+        if(PIN.Contains(digit)) return;
+        
+        // if skipping is not allowed, check if digit has been skipped
+        if (!skipAllowed && PIN.Count>0) {
+            int skippedDigit = checkSkipped(PIN[PIN.Count-1], digit);
+            // value found
+            if (skippedDigit != 0) {
 
-                    Debug.Log("Inserting skipped value: " + skippedDigit);
-                    // only add if digit not already in PIN
-                    if(PIN.Contains(skippedDigit)) {
-                        PIN.Add(skippedDigit);
-                        lastTimestamp = DateTime.Now.Second;
-                    } 
-                    Debug.Log(PIN.ToString());
-                    // PIN is already complete
-                    if (PIN.Count == maxLength) {
-                        return;
-                    }
+                // only add if skipped digit not already in PIN
+                if(!PIN.Contains(skippedDigit)) {
+                    PIN.Add(skippedDigit);
+                    lastTimestamp = DateTime.Now.Second;
+                    Debug.Log("added skipped digit: " + skippedDigit);
+                }
+                // trying to enter invalid scheme
+                // skipped digit already selected --> not allowed
+                else {
+                    invalidPassword();
+                } 
+                // PIN is already complete
+                if (PIN.Count == maxLength) {
+                    return;
                 }
             }
-            // Debug.Log("Added digit to PIN");
-            // only add if digit not already in PIN
+            // no digit was skipped --> add
             PIN.Add(digit);
             lastTimestamp = DateTime.Now.Second;
-            Debug.Log(PIN.ToString());
+            Debug.Log("added: " + digit);
         }
     }
 
@@ -136,15 +122,14 @@ public class Validator : MonoBehaviour
     {
         currDeviceID = ID;
         // get password of new device from SmartConnector 
-        // currentDevice = smartConnector.GetSmartDevice(currDeviceID);
-        // password = currentDevice.GetPassphrase();
+        smartDevice = smartConnector.GetSmartDevice(currDeviceID);
+        password = smartDevice.GetPassphrase();
         Debug.Log("new device: " +  currDeviceID);
         Debug.Log("new password: " +  password.ToString());
 }
 
     void resetPIN() {
         PIN.Clear();
-        validStart = false;
     }
 
     private void checkPIN() 
@@ -167,23 +152,22 @@ public class Validator : MonoBehaviour
         }
         validPassword();
     }
-
-    private void invalidPassword() 
-    {
-        Debug.Log("Warning. Invalid Password");
-        InvalidPasswordEvent.Invoke();
-        resetPIN();
-    }
-
     private void validPassword() 
     {
         Debug.Log("Valid Password");
-        // open door/ trigger solenoid
-        mqtt.PublishTopic(openDoor, "true");
+        // tell UI to show success        
         ValidPasswordEvent.Invoke();
+        // open door/ trigger solenoid
+        smartDevice.Unlock();
         resetPIN();
     }
 
+    private void invalidPassword() 
+    {
+        Debug.LogWarning("Warning. Invalid Password");
+        InvalidPasswordEvent.Invoke();
+        resetPIN();
+    }
 
 
     private void createSkippableDictionary() 
