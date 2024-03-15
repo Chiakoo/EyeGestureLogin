@@ -125,6 +125,9 @@ namespace M2MqttUnity.Examples
 
         protected override void Update()
         {
+            // if (!IsConnected) {
+            //     Connect();
+            // }
             base.Update(); // call ProcessMqttEvents()
         }
 
