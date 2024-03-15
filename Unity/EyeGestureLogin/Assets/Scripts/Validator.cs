@@ -52,14 +52,14 @@ public class Validator : MonoBehaviour
     int digit = 1;
     void Update()
     {
-        // Testing
-        if (!testDone) {
-            // runTest1();
-            NewDigit(0, 5);
-            testDone = true;
-        }
-        NewDigit(0, digit);
-        digit ++;
+        // // Testing
+        // if (!testDone) {
+        //     // runTest1();
+        //     NewDigit(0, 5);
+        //     testDone = true;
+        // }
+        // NewDigit(0, digit);
+        // digit ++;
         
         // only check if someone is currently entering PIN
         if (PIN.Count<=0) return;
@@ -67,12 +67,12 @@ public class Validator : MonoBehaviour
         // timeout
         if (DateTime.Now.Second > lastTimestamp + timeout) {
             Debug.Log("password timeout");
-            checkPIN();
+            invalidPassword();
         }
         // reached maximum length
         else if (PIN.Count >= maxLength) {
             Debug.Log("max Length reached");
-            checkPIN();
+            invalidPassword();
         }
     }
 
@@ -97,6 +97,7 @@ public class Validator : MonoBehaviour
                 // only add if skipped digit not already in PIN
                 if(!PIN.Contains(skippedDigit)) {
                     PIN.Add(skippedDigit);
+                    checkPIN();
                     lastTimestamp = DateTime.Now.Second;
                     Debug.Log("added skipped digit: " + skippedDigit);
                 }
@@ -113,6 +114,7 @@ public class Validator : MonoBehaviour
         }
         // no digit was skipped --> add
             PIN.Add(digit);
+            checkPIN();
             lastTimestamp = DateTime.Now.Second;
             Debug.Log("added: " + digit);
     }
@@ -131,6 +133,7 @@ public class Validator : MonoBehaviour
         PIN.Clear();
     }
 
+    // always called when adding digit
     private void checkPIN() 
     {
         Debug.Log("checking PIN");
@@ -154,12 +157,15 @@ public class Validator : MonoBehaviour
     private void validPassword() 
     {
         Debug.Log("Valid Password");
+        // check if device is connected
+        if (!smartDevice.IsAvailable()) {
+            DeviceNotConnected.Invoke();
+            Debug.LogWarning("Current device is not connected");
+        } 
         // tell UI to show success        
         ValidPasswordEvent.Invoke();
         // open door/ trigger solenoid
         smartDevice.Unlock();
-        // check if device is connected
-        if (!smartDevice.IsAvailable()) DeviceNotConnected.Invoke();;
         resetPIN();
     }
 
