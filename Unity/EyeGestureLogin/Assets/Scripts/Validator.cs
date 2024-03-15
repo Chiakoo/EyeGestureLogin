@@ -16,6 +16,8 @@ public class Validator : MonoBehaviour
     public int maxLength = 9;
 
     [Header("Unity Events")]
+    [SerializeField]
+    private UnityEvent DeviceNotConnected = new UnityEvent();
     [Tooltip("Access: ValidPasswordEvent.AddListener(validPasswordReceived())")]
     [SerializeField]
     private UnityEvent ValidPasswordEvent = new UnityEvent();
@@ -50,20 +52,17 @@ public class Validator : MonoBehaviour
     int digit = 1;
     void Update()
     {
-        // only check if someone is currently entering PIN
-        if (PIN.Count<=0) return;
-
-        // only check if device is connected
-        if (!smartDevice.IsAvailable()) return;
-
         // Testing
         if (!testDone) {
             // runTest1();
-            NewDigit(1, 5);
+            NewDigit(0, 5);
             testDone = true;
         }
-        NewDigit(1, digit);
+        NewDigit(0, digit);
         digit ++;
+        
+        // only check if someone is currently entering PIN
+        if (PIN.Count<=0) return;
 
         // timeout
         if (DateTime.Now.Second > lastTimestamp + timeout) {
@@ -111,11 +110,11 @@ public class Validator : MonoBehaviour
                     return;
                 }
             }
-            // no digit was skipped --> add
+        }
+        // no digit was skipped --> add
             PIN.Add(digit);
             lastTimestamp = DateTime.Now.Second;
             Debug.Log("added: " + digit);
-        }
     }
 
     void changeDevice(int ID) 
@@ -159,6 +158,8 @@ public class Validator : MonoBehaviour
         ValidPasswordEvent.Invoke();
         // open door/ trigger solenoid
         smartDevice.Unlock();
+        // check if device is connected
+        if (!smartDevice.IsAvailable()) DeviceNotConnected.Invoke();;
         resetPIN();
     }
 
