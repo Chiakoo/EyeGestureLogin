@@ -31,11 +31,6 @@ using uPLibrary.Networking.M2Mqtt.Messages;
 /// </summary>
 namespace M2MqttUnity.Examples
 {
-    /// <summary>
-    /// Script for using M2MQTT with Unity
-    /// </summary>
-    /// 
-    
 
     public class MqttUnity : M2MqttUnityClient
     {   
@@ -44,10 +39,12 @@ namespace M2MqttUnity.Examples
 
         // publish
         string mqttConnectionStatus = "EyeGestureLogin/Unity/isConnected" ;
+        [HideInInspector]
         public string[] mqttOpenDoor = new string[] {"EyeGestureLogin/OpenDoor"} ;
         // subscribe
         string[] mqttDoorStatus = new string[] {"EyeGestureLogin/isDoorOpen"} ;
 
+        [HideInInspector]
         public bool IsConnected = false;
        
 
@@ -96,8 +93,9 @@ namespace M2MqttUnity.Examples
 
         protected override void OnConnectionLost()
         {
-            Debug.Log("CONNECTION LOST!");
+            Debug.Log("CONNECTION LOST! Trying to reconnect ...");
             IsConnected = false;
+            base.Connect();
         }
 
         protected override void Start()

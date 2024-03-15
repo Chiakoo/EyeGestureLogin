@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028359, g: 0.22571385, b: 0.30692258, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -890,12 +890,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a485d0fd54ae6545802b0b18157da73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brokerAddress: 192.168.237.189
+  brokerAddress: 192.168.107.189
   brokerPort: 1883
   isEncrypted: 0
   connectionDelay: 500
   timeoutOnConnection: 30000
-  autoConnect: 0
+  autoConnect: 1
   mqttUserName: 
   mqttPassword: 
   mqttOpenDoor:
@@ -1227,7 +1227,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skipAllowed: 0
   timeout: 5
-  maxLength: 5
+  maxLength: 9
+  DeviceNotConnected:
+    m_PersistentCalls:
+      m_Calls: []
   ValidPasswordEvent:
     m_PersistentCalls:
       m_Calls:
