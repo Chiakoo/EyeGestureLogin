@@ -30,11 +30,10 @@ public class SingleGazePoint : MonoBehaviour
     }
 
     public void OnHoverEnter(){
-        Debug.Log("hover entered");
     }
 
     public void Selected(){
-        Debug.Log("Selected by gaze (" + loginPointObj.name+")");
+        //Debug.Log("Selected by gaze (" + loginPointObj.name+")");
         loginPointObj.GetComponent<Renderer> ().material.color = Color.green;
         //Debug.Log("NAme:" + );
         int enteredNumber = Int32.Parse(loginPointObj.name);
@@ -42,7 +41,11 @@ public class SingleGazePoint : MonoBehaviour
     }
 
     public void Deselected(){
-        Debug.Log("Deselected by gaze (" + loginPointObj.name+")");
+        //Debug.Log("Deselected by gaze (" + loginPointObj.name+")");
+        //loginPointObj.GetComponent<Renderer> ().material.color = initColor;
+    }
+
+    public void ResetToDefault(){
         loginPointObj.GetComponent<Renderer> ().material.color = initColor;
     }
 }

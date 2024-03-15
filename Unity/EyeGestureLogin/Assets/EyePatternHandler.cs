@@ -33,11 +33,13 @@ public class EyePatternHandler : MonoBehaviour
     }
 
     public void Disable(){
+        Debug.Log("Disable called");
         if(EyePatternEnabled){
             for(int i = 0;  i < transform.childCount; i++){
                 GameObject digit = transform.GetChild(i).gameObject;
                 digit.SetActive(false);
             }
+            EyePatternEnabled = false;
         }
     }
 
@@ -60,25 +62,41 @@ public class EyePatternHandler : MonoBehaviour
         //todo inform user wrong password
     }
 
+    public void OnDeviceLostConnection(){
+        StopCoroutineIfNotNull(currentCoroutine);
+        currentCoroutine = StartCoroutine(DevicLostConnection());
+    }
+
     IEnumerator DisableValid(){
+        Disable();
         text.SetActive(true);
         TextMeshPro textMesh = text.GetComponent<TextMeshPro>();
         textMesh.text = "Successfull!";
         yield return new WaitForSeconds(3);
         text.SetActive(false);
-        Disable();
     }
 
     IEnumerator DisableInvalid(){
+        Disable();
         text.SetActive(true);
         TextMeshPro textMesh = text.GetComponent<TextMeshPro>();
         textMesh.text = "Invalid Pass!\nTry Again!";
         yield return new WaitForSeconds(3);
         text.SetActive(false);
+    }
+
+    IEnumerator DevicLostConnection(){
         Disable();
+        text.SetActive(true);
+        TextMeshPro textMesh = text.GetComponent<TextMeshPro>();
+        textMesh.text = "Device lost connection!\nTry Again!";
+        yield return new WaitForSeconds(3);
+        text.SetActive(false);
+        
     }
     
     IEnumerator EnableRoutine(int id){
+        EyePatternEnabled = true;
         Debug.Log("In Enable routine!");
         text.SetActive(true);
         TextMeshPro textMesh = text.GetComponent<TextMeshPro>();
@@ -89,7 +107,9 @@ public class EyePatternHandler : MonoBehaviour
         text.SetActive(false);
         for(int i = 0;  i < transform.childCount; i++){
                 GameObject digit = transform.GetChild(i).gameObject;
-                digit.GetComponent<SingleGazePoint>().deviceId = id;
+                SingleGazePoint singleGazePoint = digit.GetComponent<SingleGazePoint>();
+                singleGazePoint.deviceId = id;
+                singleGazePoint.ResetToDefault();
                 digit.SetActive(true);
         }
     }

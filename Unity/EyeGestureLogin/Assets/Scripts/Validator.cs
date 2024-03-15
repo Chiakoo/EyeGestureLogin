@@ -10,7 +10,7 @@ public class Validator : MonoBehaviour
     [Tooltip("true: 1,3 valid. false: 1,3 becomes 1,2,3")]
     public bool skipAllowed = false;
     [Tooltip("seconds without input until timeout triggered/ password entry ends")]
-    [Range(1, 10)]
+    [Range(1, 60)]
     public int timeout = 5;
     [Tooltip("maximum password length possible (all fields)")]
     public int maxLength = 9;
@@ -96,10 +96,10 @@ public class Validator : MonoBehaviour
 
                 // only add if skipped digit not already in PIN
                 if(!PIN.Contains(skippedDigit)) {
+                    Debug.Log("added skipped digit: " + skippedDigit);
                     PIN.Add(skippedDigit);
                     checkPIN();
                     lastTimestamp = DateTime.Now.Second;
-                    Debug.Log("added skipped digit: " + skippedDigit);
                 }
                 // trying to enter invalid scheme
                 // skipped digit already selected --> not allowed
@@ -113,10 +113,10 @@ public class Validator : MonoBehaviour
             }
         }
         // no digit was skipped --> add
+            Debug.Log("added: " + digit);
             PIN.Add(digit);
             checkPIN();
             lastTimestamp = DateTime.Now.Second;
-            Debug.Log("added: " + digit);
     }
 
     void changeDevice(int ID) 
@@ -138,17 +138,12 @@ public class Validator : MonoBehaviour
     {
         Debug.Log("checking PIN");
 
-        // check length
-        if (PIN.Count != password.Count) {
-            Debug.Log("passwords are of different length");
-            invalidPassword();
-            return;
-        }
+        if (PIN.Count != password.Count) return;
 
         // check digits
         for (int i=0; i<PIN.Count; i++) {
             if (password[i] != PIN[i]) {
-                invalidPassword();
+                Debug.Log(PIN[i] + " did not match " +  password[i]);
                 return;
             }
         }
