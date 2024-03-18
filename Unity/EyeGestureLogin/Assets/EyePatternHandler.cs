@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using VIVE.OpenXR.Editor;
 
 public class EyePatternHandler : MonoBehaviour
 {
@@ -65,6 +68,20 @@ public class EyePatternHandler : MonoBehaviour
     public void OnDeviceLostConnection(){
         StopCoroutineIfNotNull(currentCoroutine);
         currentCoroutine = StartCoroutine(DevicLostConnection());
+    }
+
+    public void OnNewDigitEntered(int id){
+        bool found = false;
+        foreach(GameObject child in transform){
+                if(Int32.Parse(child.name) == id){
+                    SingleGazePoint loginpoint = child.GetComponent<SingleGazePoint>();
+                    loginpoint.MarkAsSelected();
+                    found = false;
+                }
+            }
+        if(!found){
+            Debug.LogWarning("Coudn't find requested entered digit!... Ignoring");
+        }
     }
 
     IEnumerator DisableValid(){

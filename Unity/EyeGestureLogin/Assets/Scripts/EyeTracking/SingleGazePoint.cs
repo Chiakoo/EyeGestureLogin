@@ -1,25 +1,30 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.Controls;
+using UnityEngine.Rendering.Universal.Internal;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class SingleGazePoint : MonoBehaviour
 {
-
-    public GameObject loginPointObj;
-
     public SmartConnector smartConnector;
 
     private Color initColor;
+
+    private Color lastColor;
+
+    private Color selectedColor = Color.green;
+
+    private Color hoveredColor = Color.cyan;
 
     private Validator validator;
     public int deviceId {set; get;}
     // Start is called before the first frame update
     void Start()
     {
-        initColor = loginPointObj.GetComponent<Renderer> ().material.color;
+        initColor = this.gameObject.GetComponent<Renderer> ().material.color;
         validator = GameObject.Find("Validator").GetComponent<Validator>();
     }
 
@@ -29,14 +34,39 @@ public class SingleGazePoint : MonoBehaviour
         
     }
 
+    public void MarkAsSelected(){
+        Material material = this.gameObject.GetComponent<Renderer> ().material;
+        lastColor = material.color;
+        material.color = selectedColor;
+    }
+
     public void OnHoverEnter(){
+        Material material = this.gameObject.GetComponent<Renderer> ().material;
+        if(material.color.Equals(selectedColor)){
+            return;
+        }
+        lastColor = material.color;
+        material.color = hoveredColor;
+    }
+
+    public void OnHoverExit(){
+        Material material = this.gameObject.GetComponent<Renderer> ().material;
+        //keep old selected color
+        if(material.color.Equals(selectedColor)){
+            return;
+        }
+        Color newColor = lastColor; //eventuell referenz
+        material.color = newColor;
+        lastColor = material.color;
     }
 
     public void Selected(){
+        Material material = this.gameObject.GetComponent<Renderer> ().material;
         //Debug.Log("Selected by gaze (" + loginPointObj.name+")");
-        loginPointObj.GetComponent<Renderer> ().material.color = Color.green;
-        //Debug.Log("NAme:" + );
-        int enteredNumber = Int32.Parse(loginPointObj.name);
+        lastColor = material.color;
+        material.color = selectedColor;
+        //Debug.Log("Name:" + );
+        int enteredNumber = Int32.Parse(this.gameObject.name);
         validator.NewDigit(deviceId, enteredNumber);
     }
 
@@ -46,6 +76,6 @@ public class SingleGazePoint : MonoBehaviour
     }
 
     public void ResetToDefault(){
-        loginPointObj.GetComponent<Renderer> ().material.color = initColor;
+        this.gameObject.GetComponent<Renderer> ().material.color = initColor;
     }
 }

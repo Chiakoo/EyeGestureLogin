@@ -4,6 +4,12 @@ using System;
 using UnityEngine.Events;
 using System.Collections.ObjectModel;
 
+[System.Serializable]
+public class ListEvent : UnityEvent<ReadOnlyCollection<int>>
+{
+}
+
+
 public class Validator : MonoBehaviour
 {
     [Header("Validator Settings")]
@@ -23,6 +29,8 @@ public class Validator : MonoBehaviour
     private UnityEvent ValidPasswordEvent = new UnityEvent();
     [SerializeField]
     private UnityEvent InvalidPasswordEvent = new UnityEvent();
+    [SerializeField]
+    private ListEvent NewDigitEnteredEvent = new ListEvent();
 
     // internal variables
     private int currDeviceID = -1;  
@@ -96,9 +104,8 @@ public class Validator : MonoBehaviour
 
                 // only add if skipped digit not already in PIN
                 if(!PIN.Contains(skippedDigit)) {
-                    Debug.Log("added skipped digit: " + skippedDigit);
-                    PIN.Add(skippedDigit);
-                    checkPIN();
+                    Debug.Log("will add skipped digit: " + skippedDigit);
+                    checkPIN(skippedDigit);
                     lastTimestamp = DateTime.Now.Second;
                 }
                 // trying to enter invalid scheme
@@ -115,8 +122,7 @@ public class Validator : MonoBehaviour
         }
         // no digit was skipped --> add
             Debug.Log("added: " + digit);
-            PIN.Add(digit);
-            checkPIN();
+            checkPIN(digit);
             lastTimestamp = DateTime.Now.Second;
     }
 
@@ -135,8 +141,11 @@ public class Validator : MonoBehaviour
     }
 
     // always called when adding digit
-    private void checkPIN() 
+    private void checkPIN(int digit) 
     {
+        PIN.Add(digit);
+        //invoke event
+        NewDigitEnteredEvent.Invoke(PIN.AsReadOnly());
         // Debug.Log("checking PIN");
 
         if (PIN.Count != password.Count) {
