@@ -40,9 +40,8 @@ public class Validator : MonoBehaviour
     private  ReadOnlyCollection<int> password = (new List<int>{1, 2, 3, 4, 5, 6, 7, 8, 9}).AsReadOnly();
     // the so far entered PIN
     private List<int> PIN = new List<int>();
-    // is test already done?
-    private bool testDone = false;
-    private int lastTimestamp = 0;
+    private float lastTimestamp = 0;
+    List<int> exampleInput = new List<int>() {1, 4, 9, 6, 3, 2};
 
     SmartConnector smartConnector;
     SmartDevice smartDevice;
@@ -57,23 +56,21 @@ public class Validator : MonoBehaviour
     }
 
 
-    int digit = 1;
+    int exampleCounter = 0;
     void Update()
     {
-        // // Testing
-        // if (!testDone) {
-        //     // runTest1();
-        //     NewDigit(0, 5);
-        //     testDone = true;
-        // }
-        // NewDigit(0, digit);
-        // digit ++;
+
+        // example input
+        if (exampleCounter < exampleInput.Count) {
+            NewDigit(0, exampleInput[exampleCounter]);
+            exampleCounter ++;
+        }
         
         // only check if someone is currently entering PIN
         if (PIN.Count<=0) return;
 
         // timeout
-        if (DateTime.Now.Second > lastTimestamp + timeout) {
+        if (Time.realtimeSinceStartup > lastTimestamp + timeout) {
             Debug.LogWarning("password timeout");
             invalidPassword();
         }
@@ -106,7 +103,8 @@ public class Validator : MonoBehaviour
                 if(!PIN.Contains(skippedDigit)) {
                     Debug.Log("will add skipped digit: " + skippedDigit);
                     checkPIN(skippedDigit);
-                    lastTimestamp = DateTime.Now.Second;
+                    lastTimestamp = Time.realtimeSinceStartup;
+                    Debug.Log("timestamp: " + lastTimestamp);
                 }
                 // trying to enter invalid scheme
                 // skipped digit already selected --> not allowed
@@ -123,7 +121,8 @@ public class Validator : MonoBehaviour
         // no digit was skipped --> add
             Debug.Log("added: " + digit);
             checkPIN(digit);
-            lastTimestamp = DateTime.Now.Second;
+            lastTimestamp = Time.realtimeSinceStartup;
+            Debug.Log("timestamp: " + lastTimestamp);
     }
 
     void changeDevice(int ID) 
@@ -133,8 +132,8 @@ public class Validator : MonoBehaviour
         smartDevice = smartConnector.GetSmartDevice(currDeviceID);
         password = smartDevice.GetPassphrase();
         Debug.Log("new device: " +  currDeviceID);
-        Debug.Log("new password: " +  password.ToString());
-}
+        Debug.Log("new password: " +  CollectionToString(password));
+    }
 
     void resetPIN() {
         PIN.Clear();
@@ -143,6 +142,7 @@ public class Validator : MonoBehaviour
     // always called when adding digit
     private void checkPIN(int digit) 
     {
+        Debug.Log("PIN: " + ListToString(PIN));
         PIN.Add(digit);
         //invoke event
         NewDigitEnteredEvent.Invoke(PIN.AsReadOnly());
@@ -162,18 +162,22 @@ public class Validator : MonoBehaviour
         }
         validPassword();
     }
+
     private void validPassword() 
     {
         Debug.Log("Valid Password");
+        // tell UI to show success        
+        ValidPasswordEvent.Invoke();
         // check if device is connected
         if (!smartDevice.IsAvailable()) {
             DeviceNotConnected.Invoke();
             Debug.LogWarning("Current device is not connected");
-        } 
-        // tell UI to show success        
-        ValidPasswordEvent.Invoke();
-        // open door/ trigger solenoid
-        smartDevice.Unlock();
+        }
+        else {
+            // open door/ trigger solenoid
+            smartDevice.Unlock();
+        }
+        
         resetPIN();
     }
 
@@ -182,6 +186,24 @@ public class Validator : MonoBehaviour
         Debug.LogWarning("Warning. Invalid Password");
         InvalidPasswordEvent.Invoke();
         resetPIN();
+    }
+
+    string ListToString(List<int> digitList) 
+    {
+        string output = "";
+        foreach (int digit in digitList) {
+            output += digit;
+        }
+        return output;
+    }
+
+    string CollectionToString(ReadOnlyCollection<int> collection) 
+    {
+        string output = "";
+        foreach (int digit in collection) {
+            output += digit;
+        }
+        return output;
     }
 
 
@@ -247,7 +269,5 @@ public class Validator : MonoBehaviour
         NewDigit(1, 2);
         NewDigit(1, 3);
         NewDigit(1, 4);
-
-        testDone = true;
     }
 }
