@@ -26,14 +26,14 @@ public class EyePatternHandler : MonoBehaviour
         if(EyePatternEnabled){
             Debug.LogWarning("EyeLoginPattern is already enabled with an other smart device!");
         }else{
-            Debug.Log("START Enable");
+            // Debug.Log("START Enable");
             StopCoroutineIfNotNull(currentCoroutine);
             currentCoroutine = StartCoroutine(EnableRoutine(id));
         }
     }
 
     public void Disable(){
-        Debug.Log("Disable called");
+        // Debug.Log("Disable called");
         if(EyePatternEnabled){
             for(int i = 0;  i < transform.childCount; i++){
                 GameObject digit = transform.GetChild(i).gameObject;
@@ -97,7 +97,7 @@ public class EyePatternHandler : MonoBehaviour
     
     IEnumerator EnableRoutine(int id){
         EyePatternEnabled = true;
-        Debug.Log("In Enable routine!");
+        // Debug.Log("In Enable routine!");
         text.SetActive(true);
         TextMeshPro textMesh = text.GetComponent<TextMeshPro>();
         textMesh.text = "Start \n2";

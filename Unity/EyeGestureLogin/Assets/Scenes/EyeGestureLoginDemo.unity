@@ -890,7 +890,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a485d0fd54ae6545802b0b18157da73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brokerAddress: 192.168.107.189
+  brokerAddress: 192.168.187.189
   brokerPort: 1883
   isEncrypted: 0
   connectionDelay: 500
@@ -1470,7 +1470,7 @@ MonoBehaviour:
   m_GazeTimeToSelect: 0.2
   m_OverrideTimeToAutoDeselectGaze: 0
   m_TimeToAutoDeselectGaze: 3
-  m_AllowGazeAssistance: 1
+  m_AllowGazeAssistance: 0
   m_FirstHoverEntered:
     m_PersistentCalls:
       m_Calls:
@@ -1809,7 +1809,7 @@ MonoBehaviour:
   m_GazeTimeToSelect: 0.2
   m_OverrideTimeToAutoDeselectGaze: 0
   m_TimeToAutoDeselectGaze: 3
-  m_AllowGazeAssistance: 1
+  m_AllowGazeAssistance: 0
   m_FirstHoverEntered:
     m_PersistentCalls:
       m_Calls:
@@ -2068,7 +2068,7 @@ MonoBehaviour:
   m_GazeTimeToSelect: 0.2
   m_OverrideTimeToAutoDeselectGaze: 0
   m_TimeToAutoDeselectGaze: 3
-  m_AllowGazeAssistance: 1
+  m_AllowGazeAssistance: 0
   m_FirstHoverEntered:
     m_PersistentCalls:
       m_Calls:
@@ -2582,7 +2582,7 @@ MonoBehaviour:
   m_GazeTimeToSelect: 0.2
   m_OverrideTimeToAutoDeselectGaze: 0
   m_TimeToAutoDeselectGaze: 3
-  m_AllowGazeAssistance: 1
+  m_AllowGazeAssistance: 0
   m_FirstHoverEntered:
     m_PersistentCalls:
       m_Calls:
@@ -2934,7 +2934,7 @@ MonoBehaviour:
   m_GazeTimeToSelect: 0.2
   m_OverrideTimeToAutoDeselectGaze: 0
   m_TimeToAutoDeselectGaze: 3
-  m_AllowGazeAssistance: 1
+  m_AllowGazeAssistance: 0
   m_FirstHoverEntered:
     m_PersistentCalls:
       m_Calls:
@@ -3193,7 +3193,7 @@ MonoBehaviour:
   m_GazeTimeToSelect: 0.2
   m_OverrideTimeToAutoDeselectGaze: 0
   m_TimeToAutoDeselectGaze: 3
-  m_AllowGazeAssistance: 1
+  m_AllowGazeAssistance: 0
   m_FirstHoverEntered:
     m_PersistentCalls:
       m_Calls:
@@ -3452,7 +3452,7 @@ MonoBehaviour:
   m_GazeTimeToSelect: 0.2
   m_OverrideTimeToAutoDeselectGaze: 0
   m_TimeToAutoDeselectGaze: 3
-  m_AllowGazeAssistance: 1
+  m_AllowGazeAssistance: 0
   m_FirstHoverEntered:
     m_PersistentCalls:
       m_Calls:
@@ -3743,7 +3743,7 @@ MonoBehaviour:
   m_GazeTimeToSelect: 0.2
   m_OverrideTimeToAutoDeselectGaze: 0
   m_TimeToAutoDeselectGaze: 3
-  m_AllowGazeAssistance: 1
+  m_AllowGazeAssistance: 0
   m_FirstHoverEntered:
     m_PersistentCalls:
       m_Calls:
@@ -4080,7 +4080,7 @@ MonoBehaviour:
   m_GazeTimeToSelect: 0.2
   m_OverrideTimeToAutoDeselectGaze: 0
   m_TimeToAutoDeselectGaze: 3
-  m_AllowGazeAssistance: 1
+  m_AllowGazeAssistance: 0
   m_FirstHoverEntered:
     m_PersistentCalls:
       m_Calls:
@@ -4417,9 +4417,9 @@ MonoBehaviour:
   m_RaycastSnapVolumeInteraction: 1
   m_HitClosestOnly: 0
   m_HoverToSelect: 1
-  m_HoverTimeToSelect: 1.5
+  m_HoverTimeToSelect: 0.7
   m_AutoDeselect: 1
-  m_TimeToAutoDeselect: 1
+  m_TimeToAutoDeselect: 0.6
   m_EnableUIInteraction: 1
   m_BlockUIOnInteractableSelection: 1
   m_AllowAnchorControl: 1

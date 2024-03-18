@@ -66,12 +66,12 @@ public class Validator : MonoBehaviour
 
         // timeout
         if (DateTime.Now.Second > lastTimestamp + timeout) {
-            Debug.Log("password timeout");
+            Debug.LogWarning("password timeout");
             invalidPassword();
         }
         // reached maximum length
         else if (PIN.Count >= maxLength) {
-            Debug.Log("max Length reached");
+            Debug.LogWarning("max Length reached");
             invalidPassword();
         }
     }
@@ -104,6 +104,7 @@ public class Validator : MonoBehaviour
                 // trying to enter invalid scheme
                 // skipped digit already selected --> not allowed
                 else {
+                    Debug.LogWarning("Invalid Scheme");
                     invalidPassword();
                 } 
                 // PIN is already complete
@@ -136,14 +137,17 @@ public class Validator : MonoBehaviour
     // always called when adding digit
     private void checkPIN() 
     {
-        Debug.Log("checking PIN");
+        // Debug.Log("checking PIN");
 
-        if (PIN.Count != password.Count) return;
+        if (PIN.Count != password.Count) {
+            Debug.Log("Checking PIN: different length");
+            return;
+        } 
 
         // check digits
         for (int i=0; i<PIN.Count; i++) {
             if (password[i] != PIN[i]) {
-                Debug.Log(PIN[i] + " did not match " +  password[i]);
+                Debug.Log("Checking PIN: " + PIN[i] + " != " +  password[i]);
                 return;
             }
         }
