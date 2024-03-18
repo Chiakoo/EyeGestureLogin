@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028359, g: 0.22571385, b: 0.30692258, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1226,7 +1226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skipAllowed: 0
-  timeout: 60
+  timeout: 40
   maxLength: 9
   DeviceNotConnected:
     m_PersistentCalls:
@@ -2808,7 +2808,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mqtt: {fileID: 241913166}
-  passPhrase: 0100000002000000
+  passPhrase: 01000000040000000900000006000000030000000200000005000000
 --- !u!1 &943755895
 GameObject:
   m_ObjectHideFlags: 0
