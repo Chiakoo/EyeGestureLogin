@@ -61,10 +61,10 @@ public class Validator : MonoBehaviour
     {
 
         // example input
-        if (exampleCounter < exampleInput.Count) {
-            NewDigit(0, exampleInput[exampleCounter]);
-            exampleCounter ++;
-        }
+        // if (exampleCounter < exampleInput.Count) {
+        //     NewDigit(0, exampleInput[exampleCounter]);
+        //     exampleCounter ++;
+        // }
         
         // only check if someone is currently entering PIN
         if (PIN.Count<=0) return;
@@ -101,16 +101,17 @@ public class Validator : MonoBehaviour
 
                 // only add if skipped digit not already in PIN
                 if(!PIN.Contains(skippedDigit)) {
-                    Debug.Log("will add skipped digit: " + skippedDigit);
+                    // Debug.Log("will add skipped digit: " + skippedDigit);
                     checkPIN(skippedDigit);
                     lastTimestamp = Time.realtimeSinceStartup;
-                    Debug.Log("timestamp: " + lastTimestamp);
+                    // Debug.Log("timestamp: " + lastTimestamp);
                 }
                 // trying to enter invalid scheme
                 // skipped digit already selected --> not allowed
                 else {
                     Debug.LogWarning("Invalid Scheme");
                     invalidPassword();
+                    return;
                 } 
                 // PIN is already complete
                 if (PIN.Count == maxLength) {
@@ -118,11 +119,10 @@ public class Validator : MonoBehaviour
                 }
             }
         }
-        // no digit was skipped --> add
-            Debug.Log("added: " + digit);
+            // no digit was skipped --> add
             checkPIN(digit);
             lastTimestamp = Time.realtimeSinceStartup;
-            Debug.Log("timestamp: " + lastTimestamp);
+            // Debug.Log("timestamp: " + lastTimestamp);
     }
 
     void changeDevice(int ID) 
@@ -142,8 +142,8 @@ public class Validator : MonoBehaviour
     // always called when adding digit
     private void checkPIN(int digit) 
     {
-        Debug.Log("PIN: " + ListToString(PIN));
         PIN.Add(digit);
+        Debug.Log("PIN: " + ListToString(PIN));
         //invoke event
         NewDigitEnteredEvent.Invoke(PIN.AsReadOnly());
         // Debug.Log("checking PIN");
