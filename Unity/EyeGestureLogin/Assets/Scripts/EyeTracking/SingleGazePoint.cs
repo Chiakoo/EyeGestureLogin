@@ -77,5 +77,6 @@ public class SingleGazePoint : MonoBehaviour
 
     public void ResetToDefault(){
         this.gameObject.GetComponent<Renderer> ().material.color = initColor;
+        this.gameObject.GetComponent<XRSimpleInteractable>().overrideGazeTimeToSelect = true;
     }
 }

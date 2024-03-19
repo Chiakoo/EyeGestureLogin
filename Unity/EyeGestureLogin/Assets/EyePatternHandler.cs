@@ -6,6 +6,8 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using VIVE.OpenXR.Editor;
+using System.Collections.ObjectModel;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class EyePatternHandler : MonoBehaviour
 {
@@ -70,15 +72,25 @@ public class EyePatternHandler : MonoBehaviour
         currentCoroutine = StartCoroutine(DevicLostConnection());
     }
 
-    public void OnNewDigitEntered(int id){
+    public void OnNewDigitEntered(ReadOnlyCollection<int> id){
+        Debug.Log("OnNewDigitEntered called!");
         bool found = false;
-        foreach(GameObject child in transform){
-                if(Int32.Parse(child.name) == id){
-                    SingleGazePoint loginpoint = child.GetComponent<SingleGazePoint>();
-                    loginpoint.MarkAsSelected();
-                    found = false;
-                }
+        for(int i = 0; i < transform.childCount; i++){
+            Transform child = transform.GetChild(i);
+            //reset dwell time to default of gaze interactor after first digit entry
+            if(id.Count == 1){
+                XRSimpleInteractable interactable = child.GetComponent<XRSimpleInteractable>();
+                interactable.overrideGazeTimeToSelect = false;
             }
+
+            //mark tiles as selected
+            Debug.Log("Size: " +   id.Count + "Selected one: " +  id[id.Count-1]);
+            if(Int32.Parse(child.name) == id[id.Count-1]){
+                SingleGazePoint loginpoint = child.GetComponent<SingleGazePoint>();
+                loginpoint.MarkAsSelected();
+                found = false;
+            }
+        }
         if(!found){
             Debug.LogWarning("Coudn't find requested entered digit!... Ignoring");
         }
