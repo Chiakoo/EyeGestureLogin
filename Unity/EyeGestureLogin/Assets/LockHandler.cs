@@ -29,7 +29,6 @@ public class LockHandler : MonoBehaviour
         openPosition = new Vector3 (initialParentOffset.x, openHeight, initialParentOffset.z);
 
         CloseLock();
-        OpenLock();
     }
 
     // Update is called once per frame
