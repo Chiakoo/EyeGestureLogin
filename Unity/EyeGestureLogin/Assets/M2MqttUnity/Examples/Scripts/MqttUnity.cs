@@ -37,16 +37,10 @@ namespace M2MqttUnity.Examples
 
         private List<string> eventMessages = new List<string>();
 
-        // publish
-        string mqttConnectionStatus = "EyeGestureLogin/Unity/isConnected" ;
-        [HideInInspector]
-        public string[] mqttOpenDoor = new string[] {"EyeGestureLogin/OpenDoor"} ;
-        // subscribe
-        string[] mqttDoorStatus = new string[] {"EyeGestureLogin/isDoorOpen"} ;
-
         [HideInInspector]
         public bool IsConnected = false;
-       
+
+        private Dictionary<string, MQTTSmartDevice> smartDeviceSubscriptions = new Dictionary<string, MQTTSmartDevice> ();
 
         protected override void OnConnecting()
         {
@@ -58,9 +52,6 @@ namespace M2MqttUnity.Examples
             // base.OnConnected();
             Debug.Log("Connected to broker on " + brokerAddress + "\n");
 
-            // Subscribe to topics
-            SubscribeTopic(mqttDoorStatus);
-            PublishTopic(mqttConnectionStatus, "CONNECTED");
             IsConnected = true;
         }
 
@@ -69,9 +60,14 @@ namespace M2MqttUnity.Examples
             client.Publish(topic, System.Text.Encoding.UTF8.GetBytes(message), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
         }
 
-        protected void SubscribeTopic(string[] topic)
+        public void SubscribeTopic(string[] topic, MQTTSmartDevice smartDev)
         {
-            client.Subscribe(topic, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+            //TODO qos_levels needs same length as topics...
+            byte[] qos_levels = new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE };
+            client.Subscribe(topic, qos_levels);
+            foreach (string subscrTopic in topic) {
+                smartDeviceSubscriptions.Add(subscrTopic, smartDev);
+            }
         }
 
         protected void UnsubscribeTopic(string[] topic)
@@ -109,6 +105,11 @@ namespace M2MqttUnity.Examples
             string msg = System.Text.Encoding.UTF8.GetString(message);
             Debug.Log("[" + topic + "]: " + msg);
             StoreMessage(msg);
+            Debug.Log("Received Message in MqttUnity: " + msg + " on topic: " + topic);
+            if (smartDeviceSubscriptions.ContainsKey(topic)) {
+                smartDeviceSubscriptions[topic].OnReceiveTopic(topic, msg);
+            }
+            // ReceivedMQTTMessage.Invoke
         }
 
         // needed?

@@ -171,13 +171,12 @@ public class Validator : MonoBehaviour
         // check if device is connected
         if (!smartDevice.IsAvailable()) {
             DeviceNotConnected.Invoke();
-            Debug.LogWarning("Current device is not connected");
+            Debug.LogWarning("Could not open lock - no connection");
         }
         else {
             // open door/ trigger solenoid
             smartDevice.Unlock();
         }
-        
         resetPIN();
     }
 
