@@ -233,6 +233,7 @@ namespace M2MqttUnity
         {
             foreach (MqttMsgPublishEventArgs msg in backMessageQueue)
             {
+                Debug.Log("Called ProcessMQTTMessageBackground");
                 DecodeMessage(msg.Topic, msg.Message);
             }
             backMessageQueue.Clear();

@@ -22,7 +22,7 @@ public class MQTTSmartDevice : SmartDevice
     private const string subscribeArduinoStatus = "EyeGestureLogin/0/isConnected";
 
     public List<int> passPhrase = new List<int> {1,2,3,6};
-    private bool publishedConnection = true;
+    private bool publishedConnection = false;
 
     void Start()
     {
@@ -34,6 +34,7 @@ public class MQTTSmartDevice : SmartDevice
     void Update()
     {
         if (IsAvailable() && !publishedConnection) {
+            Debug.Log("Subscribe from MQTT device");
             mqtt.PublishTopic(publishMqttConnection, "CONNECTED");
             mqtt.SubscribeTopic(new string[] {subscribeDoorStatus, subscribeArduinoStatus}, this);
             publishedConnection = true;

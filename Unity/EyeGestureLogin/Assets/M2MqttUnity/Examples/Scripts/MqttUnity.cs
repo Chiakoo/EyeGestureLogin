@@ -62,7 +62,9 @@ namespace M2MqttUnity.Examples
 
         public void SubscribeTopic(string[] topic, MQTTSmartDevice smartDev)
         {
-            client.Subscribe(topic, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+            //TODO qos_levels needs same length as topics...
+            byte[] qos_levels = new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE };
+            client.Subscribe(topic, qos_levels);
             foreach (string subscrTopic in topic) {
                 smartDeviceSubscriptions.Add(subscrTopic, smartDev);
             }
@@ -103,9 +105,7 @@ namespace M2MqttUnity.Examples
             string msg = System.Text.Encoding.UTF8.GetString(message);
             Debug.Log("[" + topic + "]: " + msg);
             StoreMessage(msg);
-
             Debug.Log("Received Message in MqttUnity: " + msg + " on topic: " + topic);
-
             if (smartDeviceSubscriptions.ContainsKey(topic)) {
                 smartDeviceSubscriptions[topic].OnReceiveTopic(topic, msg);
             }
