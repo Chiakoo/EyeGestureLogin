@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.Controls;
-using UnityEngine.Rendering.Universal.Internal;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class SingleGazePoint : MonoBehaviour
