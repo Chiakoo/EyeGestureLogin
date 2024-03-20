@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028359, g: 0.22571385, b: 0.30692258, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1017,9 +1017,8 @@ PrefabInstance:
     - target: {fileID: 8462908634919313066, guid: 6f9a3398f45c39b47a75eba882b98181,
         type: 3}
       propertyPath: m_text
-      value: Welcome to the EyeGestureLogin for VR demo! This is an example of a
-        hands free interaction and login using gaze. Look at this pannel for more
-        infomation!
+      value: Look at the next fields to enter the password. The correct password
+        for this demo is the one above.
       objectReference: {fileID: 0}
     - target: {fileID: 8732239745932128268, guid: 6f9a3398f45c39b47a75eba882b98181,
         type: 3}
@@ -2429,9 +2428,8 @@ PrefabInstance:
     - target: {fileID: 8462908634919313066, guid: 6f9a3398f45c39b47a75eba882b98181,
         type: 3}
       propertyPath: m_text
-      value: Welcome to the EyeGestureLogin for VR demo! This is an example of a
-        hands free interaction and login using gaze. Look at this pannel for more
-        infomation!
+      value: Look at the lock icon of the smart locker for a moment to start the
+        login process!
       objectReference: {fileID: 0}
     - target: {fileID: 8732239745932128268, guid: 6f9a3398f45c39b47a75eba882b98181,
         type: 3}
@@ -6308,9 +6306,8 @@ PrefabInstance:
     - target: {fileID: 8462908634919313066, guid: 6f9a3398f45c39b47a75eba882b98181,
         type: 3}
       propertyPath: m_text
-      value: Welcome to the EyeGestureLogin for VR demo! This is an example of a
-        hands free interaction and login using gaze. Look at this pannel for more
-        infomation!
+      value: 'After a short cooldown an Android like pattern is shown. Look at one
+        field of your choice to start the pattern login. '
       objectReference: {fileID: 0}
     - target: {fileID: 8732239745932128268, guid: 6f9a3398f45c39b47a75eba882b98181,
         type: 3}
