@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028359, g: 0.22571385, b: 0.30692258, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -898,8 +898,6 @@ MonoBehaviour:
   autoConnect: 1
   mqttUserName: 
   mqttPassword: 
-  mqttOpenDoor:
-  - EyeGestureLogin/OpenDoor
   IsConnected: 0
 --- !u!1 &283740252
 GameObject:
@@ -2623,6 +2621,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mqtt: {fileID: 241913166}
+  publishOpenDoor: EyeGestureLogin/0/OpenDoor
+  publishMqttConnection: EyeGestureLogin/Unity/isConnected
   passPhrase: 010000000400000009000000
 --- !u!1 &943755895
 GameObject:
@@ -3557,7 +3557,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.3
+  m_Radius: 0.15
   m_Center: {x: 0, y: 0.026, z: 0}
 --- !u!1 &1351060019
 GameObject:
@@ -3919,7 +3919,7 @@ PrefabInstance:
     - target: {fileID: 1694997322206966447, guid: 5f39ae34e4c1ba4439f016d560e3c5ae,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.06
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 1694997322206966447, guid: 5f39ae34e4c1ba4439f016d560e3c5ae,
         type: 3}
@@ -3940,6 +3940,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3497069454454143804, guid: 5f39ae34e4c1ba4439f016d560e3c5ae,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3497069454454143804, guid: 5f39ae34e4c1ba4439f016d560e3c5ae,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3497069454454143804, guid: 5f39ae34e4c1ba4439f016d560e3c5ae,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3497069454454143804, guid: 5f39ae34e4c1ba4439f016d560e3c5ae,
         type: 3}

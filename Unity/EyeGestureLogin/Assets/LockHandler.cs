@@ -15,6 +15,7 @@ public class LockHandler : MonoBehaviour
     private float openHeight = 0.07f;
     private Vector3 openPosition;
     private int openYRotation = 180;
+    bool lockOpen = false;
 
 
 
@@ -27,8 +28,6 @@ public class LockHandler : MonoBehaviour
         initialParentOffset = lockOpener.transform.localPosition;
         lockedPosition = new Vector3 (initialParentOffset.x, lockedHeight, initialParentOffset.z);
         openPosition = new Vector3 (initialParentOffset.x, openHeight, initialParentOffset.z);
-
-        CloseLock();
     }
 
     // Update is called once per frame
@@ -39,14 +38,20 @@ public class LockHandler : MonoBehaviour
 
 
     public void OpenLock() {
+        // if lock already open --> return
+        if (lockOpen) return;
         Debug.Log("Opening Virtual Lock");
         lockOpener.transform.localPosition = openPosition;
-        // lockOpener.transform.RotateAround(lockOpener.transform.position, lockOpener.transform.up, Time.deltaTime * 180f);
         lockOpener.transform.RotateAround(lockOpener.transform.position, lockOpener.transform.up, openYRotation);
+        lockOpen = true;
     }
 
     public void CloseLock() {
+        // if lock already closed --> return
+        if (!lockOpen) return;
         Debug.Log("Closing Virtual Lock");
         lockOpener.transform.localPosition = lockedPosition;
+        lockOpener.transform.RotateAround(lockOpener.transform.position, lockOpener.transform.up, -openYRotation);
+        lockOpen = false;
     }
 }
