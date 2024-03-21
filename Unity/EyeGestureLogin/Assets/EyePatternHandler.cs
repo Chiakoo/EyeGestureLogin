@@ -78,7 +78,7 @@ public class EyePatternHandler : MonoBehaviour
         for(int i = 0; i < transform.childCount; i++){
             Transform child = transform.GetChild(i);
             //reset dwell time to default of gaze interactor after first digit entry
-            if(id.Count == 1){
+            if(id.Count == 1 && Int32.Parse(child.name)>=0){
                 XRSimpleInteractable interactable = child.GetComponent<XRSimpleInteractable>();
                 interactable.overrideGazeTimeToSelect = false;
             }

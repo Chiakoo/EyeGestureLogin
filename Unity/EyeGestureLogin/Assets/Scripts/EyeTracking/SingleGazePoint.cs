@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Inputs;
 
 public class SingleGazePoint : MonoBehaviour
 {
@@ -46,6 +48,11 @@ public class SingleGazePoint : MonoBehaviour
         }
         lastColor = material.color;
         material.color = hoveredColor;
+        List<GameObject> childs = new List<GameObject>();
+        gameObject.GetChildGameObjects(childs);
+        foreach(var child in childs){
+            child.GetComponent<Renderer>().material.color = hoveredColor; 
+        }
     }
 
     public void OnHoverExit(){
@@ -56,6 +63,14 @@ public class SingleGazePoint : MonoBehaviour
         }
         Color newColor = lastColor; //eventuell referenz
         material.color = newColor;
+
+        //update the color of all childs of objects
+        List<GameObject> childs = new List<GameObject>();
+        gameObject.GetChildGameObjects(childs);
+        foreach(var child in childs){
+            child.GetComponent<Renderer>().material.color = newColor; 
+        }
+
         lastColor = material.color;
     }
 
@@ -65,7 +80,7 @@ public class SingleGazePoint : MonoBehaviour
         lastColor = material.color;
         material.color = selectedColor;
         Debug.Log("Name:" + this.gameObject.name);
-        if(this.gameObject.name.Equals("cancel")){
+        if(this.gameObject.name.Equals("-1")){
             Debug.Log("will cancel!");
             validator.CancelEntry();
             return;
