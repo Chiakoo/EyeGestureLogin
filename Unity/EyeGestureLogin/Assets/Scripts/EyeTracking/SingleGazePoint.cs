@@ -64,7 +64,12 @@ public class SingleGazePoint : MonoBehaviour
         //Debug.Log("Selected by gaze (" + loginPointObj.name+")");
         lastColor = material.color;
         material.color = selectedColor;
-        //Debug.Log("Name:" + );
+        Debug.Log("Name:" + this.gameObject.name);
+        if(this.gameObject.name.Equals("cancel")){
+            Debug.Log("will cancel!");
+            validator.CancelEntry();
+            return;
+        }
         int enteredNumber = Int32.Parse(this.gameObject.name);
         validator.NewDigit(deviceId, enteredNumber);
     }

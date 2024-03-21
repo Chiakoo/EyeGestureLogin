@@ -103,7 +103,6 @@ public class Validator : MonoBehaviour
                 if(!PIN.Contains(skippedDigit)) {
                     // Debug.Log("will add skipped digit: " + skippedDigit);
                     checkPIN(skippedDigit);
-                    lastTimestamp = Time.realtimeSinceStartup;
                     // Debug.Log("timestamp: " + lastTimestamp);
                 }
                 // trying to enter invalid scheme
@@ -121,7 +120,6 @@ public class Validator : MonoBehaviour
         }
             // no digit was skipped --> add
             checkPIN(digit);
-            lastTimestamp = Time.realtimeSinceStartup;
             // Debug.Log("timestamp: " + lastTimestamp);
     }
 
@@ -144,6 +142,8 @@ public class Validator : MonoBehaviour
     {
         PIN.Add(digit);
         Debug.Log("PIN: " + ListToString(PIN));
+        lastTimestamp = Time.realtimeSinceStartup;
+
         //invoke event
         NewDigitEnteredEvent.Invoke(PIN.AsReadOnly());
         // Debug.Log("checking PIN");
@@ -268,5 +268,10 @@ public class Validator : MonoBehaviour
         NewDigit(1, 2);
         NewDigit(1, 3);
         NewDigit(1, 4);
+    }
+
+    public void CancelEntry()
+    {
+        invalidPassword();
     }
 }

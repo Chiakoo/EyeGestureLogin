@@ -84,7 +84,7 @@ public class EyePatternHandler : MonoBehaviour
             }
 
             //mark tiles as selected
-            // Debug.Log("Size: " +   id.Count + "  Selected one: " +  id[id.Count-1]);
+             Debug.Log("Size: " +   id.Count + "  Selected digit: " +  id[id.Count-1]);
             if(Int32.Parse(child.name) == id[id.Count-1]){
                 SingleGazePoint loginpoint = child.GetComponent<SingleGazePoint>();
                 loginpoint.MarkAsSelected();
