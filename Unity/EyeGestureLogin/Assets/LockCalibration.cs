@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class LockCalibration : MonoBehaviour
 {
 
-    public InputActionProperty button;
     [SerializeField]
     private GameObject calibrationController;
     private float currAppliedRotationY = 0;
@@ -20,7 +20,7 @@ public class LockCalibration : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (button.action.ReadValue<bool>()) {
+        if (Input.GetKeyDown(KeyCode.C)) {
             Debug.Log("button triggered");
             calibrateLock();
         }
