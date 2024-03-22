@@ -105,7 +105,7 @@ namespace M2MqttUnity.Examples
             string msg = System.Text.Encoding.UTF8.GetString(message);
             Debug.Log("[" + topic + "]: " + msg);
             StoreMessage(msg);
-            Debug.Log("Received Message in MqttUnity: " + msg + " on topic: " + topic);
+            // Debug.Log("Received Message in MqttUnity: " + msg + " on topic: " + topic);
             if (smartDeviceSubscriptions.ContainsKey(topic)) {
                 smartDeviceSubscriptions[topic].OnReceiveTopic(topic, msg);
             }

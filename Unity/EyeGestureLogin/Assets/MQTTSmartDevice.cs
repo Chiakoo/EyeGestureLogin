@@ -23,6 +23,7 @@ public class MQTTSmartDevice : SmartDevice
 
     public List<int> passPhrase = new List<int> {1,2,3,6};
     private bool publishedConnection = false;
+    private bool isLockOpen = false;
 
     void Start()
     {
@@ -58,7 +59,7 @@ public class MQTTSmartDevice : SmartDevice
 
     public override bool IsUnlocked()
     {
-        throw new System.NotImplementedException();
+        return isLockOpen;
     }
 
     public override bool Lock()
@@ -91,7 +92,7 @@ public class MQTTSmartDevice : SmartDevice
     }
 
     public void OnReceiveTopic(string topic, string message) {
-        Debug.Log("Received Topic: " + topic + " Message: " + message);
+        // Debug.Log("Received Topic: " + topic + " Message: " + message);
         switch (topic) {
             case subscribeArduinoStatus:
                 break;
@@ -99,9 +100,11 @@ public class MQTTSmartDevice : SmartDevice
                 
                 if (message == "open") {
                     OpenVirtualLock();
+                    isLockOpen = true;
                 }
                 else if (message == "closed") {
                     LockVirtualLock();
+                    isLockOpen = false;
                 }
                 break;
             default: 

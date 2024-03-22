@@ -31,6 +31,8 @@ public class Validator : MonoBehaviour
     private UnityEvent InvalidPasswordEvent = new UnityEvent();
     [SerializeField]
     private ListEvent NewDigitEnteredEvent = new ListEvent();
+        [SerializeField]
+    private UnityEvent PasswordCanceledEvent = new UnityEvent();
 
     // internal variables
     private int currDeviceID = -1;  
@@ -149,14 +151,14 @@ public class Validator : MonoBehaviour
         // Debug.Log("checking PIN");
 
         if (PIN.Count != password.Count) {
-            Debug.Log("Checking PIN: different length");
+            // Debug.Log("Checking PIN: different length");
             return;
         } 
 
         // check digits
         for (int i=0; i<PIN.Count; i++) {
             if (password[i] != PIN[i]) {
-                Debug.Log("Checking PIN: " + PIN[i] + " != " +  password[i]);
+                // Debug.Log("Checking PIN: " + PIN[i] + " != " +  password[i]);
                 return;
             }
         }
@@ -204,7 +206,6 @@ public class Validator : MonoBehaviour
         }
         return output;
     }
-
 
     private void createSkippableDictionary() 
     {
@@ -256,7 +257,6 @@ public class Validator : MonoBehaviour
         return PIN.Contains(digit);
     }
 
-
     void runTest1() 
     {
         // should be discarded
@@ -272,6 +272,8 @@ public class Validator : MonoBehaviour
 
     public void CancelEntry()
     {
-        invalidPassword();
+        // invalidPassword();
+        resetPIN();
+        PasswordCanceledEvent.Invoke();
     }
 }
