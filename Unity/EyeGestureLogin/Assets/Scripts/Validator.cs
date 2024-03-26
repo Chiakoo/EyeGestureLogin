@@ -31,6 +31,8 @@ public class Validator : MonoBehaviour
     private UnityEvent InvalidPasswordEvent = new UnityEvent();
     [SerializeField]
     private ListEvent NewDigitEnteredEvent = new ListEvent();
+        [SerializeField]
+    private UnityEvent PasswordCanceledEvent = new UnityEvent();
 
     // internal variables
     private int currDeviceID = -1;  
@@ -103,7 +105,6 @@ public class Validator : MonoBehaviour
                 if(!PIN.Contains(skippedDigit)) {
                     // Debug.Log("will add skipped digit: " + skippedDigit);
                     checkPIN(skippedDigit);
-                    lastTimestamp = Time.realtimeSinceStartup;
                     // Debug.Log("timestamp: " + lastTimestamp);
                 }
                 // trying to enter invalid scheme
@@ -121,7 +122,6 @@ public class Validator : MonoBehaviour
         }
             // no digit was skipped --> add
             checkPIN(digit);
-            lastTimestamp = Time.realtimeSinceStartup;
             // Debug.Log("timestamp: " + lastTimestamp);
     }
 
@@ -144,19 +144,21 @@ public class Validator : MonoBehaviour
     {
         PIN.Add(digit);
         Debug.Log("PIN: " + ListToString(PIN));
+        lastTimestamp = Time.realtimeSinceStartup;
+
         //invoke event
         NewDigitEnteredEvent.Invoke(PIN.AsReadOnly());
         // Debug.Log("checking PIN");
 
         if (PIN.Count != password.Count) {
-            Debug.Log("Checking PIN: different length");
+            // Debug.Log("Checking PIN: different length");
             return;
         } 
 
         // check digits
         for (int i=0; i<PIN.Count; i++) {
             if (password[i] != PIN[i]) {
-                Debug.Log("Checking PIN: " + PIN[i] + " != " +  password[i]);
+                // Debug.Log("Checking PIN: " + PIN[i] + " != " +  password[i]);
                 return;
             }
         }
@@ -204,7 +206,6 @@ public class Validator : MonoBehaviour
         }
         return output;
     }
-
 
     private void createSkippableDictionary() 
     {
@@ -256,7 +257,6 @@ public class Validator : MonoBehaviour
         return PIN.Contains(digit);
     }
 
-
     void runTest1() 
     {
         // should be discarded
@@ -268,5 +268,12 @@ public class Validator : MonoBehaviour
         NewDigit(1, 2);
         NewDigit(1, 3);
         NewDigit(1, 4);
+    }
+
+    public void CancelEntry()
+    {
+        // invalidPassword();
+        resetPIN();
+        PasswordCanceledEvent.Invoke();
     }
 }

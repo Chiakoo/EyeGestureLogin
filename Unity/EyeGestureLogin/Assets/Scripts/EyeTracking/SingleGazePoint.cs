@@ -2,15 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Inputs;
 
 public class SingleGazePoint : MonoBehaviour
 {
     public SmartConnector smartConnector;
 
-    private Color initColor;
+    public Color initColor;
 
     private Color lastColor;
 
@@ -23,7 +25,6 @@ public class SingleGazePoint : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        initColor = this.gameObject.GetComponent<Renderer> ().material.color;
         validator = GameObject.Find("Validator").GetComponent<Validator>();
     }
 
@@ -46,6 +47,11 @@ public class SingleGazePoint : MonoBehaviour
         }
         lastColor = material.color;
         material.color = hoveredColor;
+        List<GameObject> childs = new List<GameObject>();
+        gameObject.GetChildGameObjects(childs);
+        foreach(var child in childs){
+            child.GetComponent<Renderer>().material.color = hoveredColor; 
+        }
     }
 
     public void OnHoverExit(){
@@ -55,8 +61,15 @@ public class SingleGazePoint : MonoBehaviour
             return;
         }
         Color newColor = lastColor; //eventuell referenz
-        material.color = newColor;
         lastColor = material.color;
+        material.color = newColor;
+
+        //update the color of all childs of objects
+        List<GameObject> childs = new List<GameObject>();
+        gameObject.GetChildGameObjects(childs);
+        foreach(var child in childs){
+            child.GetComponent<Renderer>().material.color = newColor; 
+        }
     }
 
     public void Selected(){
@@ -64,7 +77,12 @@ public class SingleGazePoint : MonoBehaviour
         //Debug.Log("Selected by gaze (" + loginPointObj.name+")");
         lastColor = material.color;
         material.color = selectedColor;
-        //Debug.Log("Name:" + );
+        // Debug.Log("Name:" + this.gameObject.name);
+        if(this.gameObject.name.Equals("-1")){
+            Debug.Log("Canceled");
+            validator.CancelEntry();
+            return;
+        }
         int enteredNumber = Int32.Parse(this.gameObject.name);
         validator.NewDigit(deviceId, enteredNumber);
     }
@@ -77,5 +95,11 @@ public class SingleGazePoint : MonoBehaviour
     public void ResetToDefault(){
         this.gameObject.GetComponent<Renderer> ().material.color = initColor;
         this.gameObject.GetComponent<XRSimpleInteractable>().overrideGazeTimeToSelect = true;
+
+        List<GameObject> childs = new List<GameObject>();
+        gameObject.GetChildGameObjects(childs);
+        foreach(var child in childs){
+            child.GetComponent<Renderer>().material.color = initColor; 
+        }
     }
 }
