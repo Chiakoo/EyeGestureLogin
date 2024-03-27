@@ -5,24 +5,20 @@
 
 // ------------[WiFi]------------------
 
-#define wifiSSID "Zest"
-#define wifiPassword "susi7598"
-
-// #define wifiSSID "NB-781 5508"
-// #define wifiPassword "18By785/"
+#define wifiSSID "TODO"
+#define wifiPassword "TODO"
 
 // ------------[MQTT]------------------
 #define mqttUser ""
 #define mqttPassword ""
-// #define mqttServer "test.mosquitto.org"
-#define mqttServer "192.168.150.189"
+#define mqttServer "192.168.11.2" //TODO
 #define mqttServerPort 1883
 #define mqttDeviceName "SolenoidMQTT"
 
 // define topics
-#define mqttOpenDoor "EyeGestureLogin/OpenDoor"
-#define mqttDoorStatus "EyeGestureLogin/isDoorOpen"
-#define mqttConnectionStatus "EyeGestureLogin/isConnected"
+#define mqttOpenDoor "EyeGestureLogin/0/OpenDoor"
+#define mqttDoorStatus "EyeGestureLogin/0/isDoorOpen"
+#define mqttConnectionStatus "EyeGestureLogin/0/isConnected"
 
 // ------------[SOLENOID]------------------
 #define pullPin 14
