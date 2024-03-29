@@ -3,28 +3,45 @@
 #include "solenoid.h"
 #include "settings.h"
 
-// put function declarations here:
-int myFunction(int, int);
 
-Solenoid doorOpener(pullPin);
+mqttManager mqtt;
+Solenoid doorOpener(pullPin, 5000);
 unsigned long timer = 0;
 
-void setup() {
-  // put your setup code here, to run once:
+String currTopic;
+String currContent;
 
-  int result = myFunction(2, 3);
+void setup() {
+    // Serial.begin(115200);
+    Serial.begin(9600);
+
+    mqtt.wifiSetup();
+    mqtt.mqttSetup();
 }
 
 void loop() {
-    if(millis() >= timer + 3000){
-        Serial.print("pull!");
-        doorOpener.pull();
-        timer = millis();
+    // if(millis() >= timer + 3000){
+    //     Serial.println("pull!");
+    //     doorOpener.pull();
+    //     timer = millis();
+    // }
+    mqtt.mqttRefresher();
+    
+    // new callback available?
+    if (mqtt.checkCallback(&currTopic, &currContent)) {
+        // openDoor topic
+        if (currTopic == mqttOpenDoor) {
+            Serial.println("received OpenDoor");
+            if (currContent == "true") {
+                doorOpener.pull();
+                mqtt.publishTopic(mqttDoorStatus, "open");
+            }
+        }
     }
-  // put your main code here, to run repeatedly:
+
+    if (doorOpener.compute() == "closed") {
+        Serial.println("publish: closed door");
+        mqtt.publishTopic(mqttDoorStatus, "closed");
+    }
 }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
-}
