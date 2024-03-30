@@ -14,9 +14,9 @@
 11. You have done the setup, have fun to test the prototype!
 
 ## Settings
-# MQTT:
-# LoginPoint dwell time:
-# First Digit dwell time:
-# Other Digit dwell time:
-# Validator Settings
+#### MQTT:
+#### LoginPoint dwell time:
+#### First Digit dwell time:
+#### Other Digit dwell time:
+#### Validator Settings
 Timeout...
