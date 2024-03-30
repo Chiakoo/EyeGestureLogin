@@ -13,11 +13,13 @@ using UnityEngine.Events;
 public class EyePatternHandler : MonoBehaviour
 {
     private bool EyePatternEnabled = false; 
-    // Start is called before the first frame update
-    public GameObject text;
 
+    [Tooltip("Text object to display the messages on.")]
+    public GameObject text;
+    [Tooltip("GameObject that is shown on password enty failure.")]
     public GameObject cross;
 
+    [Tooltip("GameObject that is shown on password enty success.")]
     public GameObject tick;
 
     private SmartConnector smartConnector;

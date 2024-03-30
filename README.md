@@ -26,14 +26,21 @@ The MQTT Smart Device object has the setting of the passcode.
 - ```Broker Port```: Port of the MQTT broker
 - ```Auto Connect```: Must be enabled to connect to Unity. Deactivate this to test the application, because it will freeze for a few seconds on start up if the MQTT broker is not reachable.
 ![alt text](materials/MqttUnity.png "Setting of MQTTSmartDevice")
-#### LoginPoint dwell time:
-#### First Digit dwell time:
-#### Other Digits dwell time:
-#### Validator Settings
+#### Dwell time settings:
+The dwell time is the time that is needed to select one object / interactable by gaze.
+##### LoginPoint dwell time:
+Go to "Smart Devices/MQTT Smart Device/Lock" and then to the Component  "XR Simple Interactable" and expand "Gaze Configuration" and set the ```Gaze Time To Select``` to the desired time in seconds.
+ ![alt text](materials/Interactable.png "Setting of an interactable")
+##### First Entered Digit dwell time:
+Go to "XR Setup/XR Origin/Main Camera/EyePatternInteractables/*" and then to the Component  "XR Simple Interactable" and expand "Gaze Configuration" and set the ```Gaze Time To Select``` to the desired time in seconds.
+##### Other Entered Digits dwell time:
+Go to "XR Setup/XR Origin/Main Camera/Gaze Interactor" and then to the Component  "XR Gaze Interactor" and expand "Selection Configuration" and set the ```Hover Time To Select``` to the desired time in seconds.
+ ![alt text](materials/Select.png "Setting of an Gaze Interactor")
+##### Validator Settings
 - ```Timeout```:
 - ```Skip Allowed```:
 - ```Timeout```:
-- ```Max Length```: Change only if, the pattern will increase in size. Must be the same size as the amout of SingleGazePoints-1.
+- ```Max Length```: Change only if the pattern will increase in size. Must be the same size as the amout of SingleGazePoints-1.
 ![alt text](materials/Validator.png "Setting of MQTTSmartDevice")
 
 

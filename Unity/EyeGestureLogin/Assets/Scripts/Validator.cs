@@ -9,7 +9,9 @@ public class ListEvent : UnityEvent<ReadOnlyCollection<int>>
 {
 }
 
-
+/// <summary>
+/// Class <c>Validator</c> handels the entered passwords and validates them. Events for the PatternManager/EyePatternHandler are triggered here.
+/// </summary>
 public class Validator : MonoBehaviour
 {
     [Header("Validator Settings")]

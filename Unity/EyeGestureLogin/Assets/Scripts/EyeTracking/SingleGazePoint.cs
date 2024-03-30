@@ -8,6 +8,9 @@ using UnityEngine.InputSystem.Controls;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Inputs;
 
+/// <summary>
+/// Class <c>SingleGazePoint</c> represents a single login field of the pattern and informs the validator on sucessfull selection.
+/// </summary>
 public class SingleGazePoint : MonoBehaviour
 {
     public SmartConnector smartConnector;
@@ -79,7 +82,7 @@ public class SingleGazePoint : MonoBehaviour
         material.color = selectedColor;
         // Debug.Log("Name:" + this.gameObject.name);
         if(this.gameObject.name.Equals("-1")){
-            Debug.Log("Canceled");
+        //    Debug.Log("Canceled");
             validator.CancelEntry();
             return;
         }
